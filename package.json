@@ -1,0 +1,37 @@
+{
+  "name": "coinbase-announcer",
+  "version": "1.0.0",
+  "description": "Receive a notification on your phone when Coinbase announces a new coin listing",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "interval-promise": "^1.2.0",
+    "ioredis": "^3.2.2",
+    "node-fetch": "^2.1.2"
+  },
+  "devDependencies": {
+    "form-data": "^2.3.2",
+    "nodemon": "^1.17.5"
+  },
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jvandenaardweg/coinbase-announcer.git"
+  },
+  "keywords": [
+    "coinbase",
+    "bitcoin",
+    "cryprocurrency",
+    "ethereum"
+  ],
+  "author": "Jordy van den Aardweg <jordyvandenaardweg@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jvandenaardweg/coinbase-announcer/issues"
+  },
+  "homepage": "https://github.com/jvandenaardweg/coinbase-announcer#readme"
+}
