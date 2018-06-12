@@ -26,3 +26,5 @@ I noticed after the pump. Not gonna happen again.
 You can. But you'll probably receive other notifications as well. This script filters out the things you don't want to receive as a notification ánd shows relevant information in your phone's lockscreen. So you can act quickly.
 
 ###### Icon made by Smashicons from [Flaticon.com](https://www.flaticon.com)
+
+###### I'm not affiliated with Coinbase in any way. I just created this service because I thought others find this helpful.
