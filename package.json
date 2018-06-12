@@ -1,5 +1,5 @@
 {
-  "name": "coinbase-announcer",
+  "name": "coinbase-notifier",
   "version": "1.0.0",
   "description": "Receive a notification on your phone when Coinbase announces a new coin listing",
   "main": "app.js",
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jvandenaardweg/coinbase-announcer.git"
+    "url": "git+https://github.com/jvandenaardweg/coinbase-notifier.git"
   },
   "keywords": [
     "coinbase",
@@ -31,7 +31,7 @@
   "author": "Jordy van den Aardweg <jordyvandenaardweg@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jvandenaardweg/coinbase-announcer/issues"
+    "url": "https://github.com/jvandenaardweg/coinbase-notifier/issues"
   },
-  "homepage": "https://github.com/jvandenaardweg/coinbase-announcer#readme"
+  "homepage": "https://github.com/jvandenaardweg/coinbase-notifier#readme"
 }

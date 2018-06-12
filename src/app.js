@@ -54,27 +54,27 @@ async function getData() {
     const coinmarketcapImporter = new CoinmarketcapImporter()
 
     const tweets = await twitterImporter.getData()
-    console.log(`Coinbase Announcer: Got ${tweets.length} Tweets from Coinbase Twitter account.`)
+    console.log(`Coinbase Notifier: Got ${tweets.length} Tweets from Coinbase Twitter account.`)
 
     const currencies = await coinmarketcapImporter.getData()
-    console.log(`Coinbase Announcer: Got ${currencies.length} currencies from Coinmarketcap.`)
+    console.log(`Coinbase Notifier: Got ${currencies.length} currencies from Coinmarketcap.`)
 
     const storedTweetIds = await getStoredTweetIds()
-    console.log(`Coinbase Announcer: Already got ${Object.keys(storedTweetIds).length} tweets in our database. Try to determine if we got new ones...`)
+    console.log(`Coinbase Notifier: Already got ${Object.keys(storedTweetIds).length} tweets in our database. Try to determine if we got new ones...`)
 
     const newTweets = tweets.filter(tweet => {
       return !Object.keys(storedTweetIds).includes(tweet.id.toString()) // toString because Redis returns tweet Id's as strings
     })
 
     if (!newTweets.length) {
-      console.log('Coinbase Announcer: No new Tweets found. We stop. Bye!')
+      console.log('Coinbase Notifier: No new Tweets found. We stop. Bye!')
     } else {
-      console.log(`Coinbase Announcer: Found ${newTweets.length} tweets to analyze! Analyzing...`)
+      console.log(`Coinbase Notifier: Found ${newTweets.length} tweets to analyze! Analyzing...`)
 
       const matchingTweets = getMatchingTweets(newTweets, currencies)
       console.log(matchingTweets.length)
       if (matchingTweets.length) {
-        console.log(`Coinbase Announcer: Found a matching Tweet after analyzing!`)
+        console.log(`Coinbase Notifier: Found a matching Tweet after analyzing!`)
 
         matchingTweets.forEach(match => {
 
@@ -89,7 +89,7 @@ async function getData() {
         })
 
       } else {
-        console.log('Coinbase Announcer: No matching Tweet found after analyzing.')
+        console.log('Coinbase Notifier: No matching Tweet found after analyzing.')
       }
 
     }
@@ -122,7 +122,7 @@ function getMatchingTweets (tweets, currencies) {
 }
 
 function store (tweetId) {
-  console.log(`Coinbase Announcer: Storing Tweet ID ${tweetId} in the database.`)
+  console.log(`Coinbase Notifier: Storing Tweet ID ${tweetId} in the database.`)
   redis.hset(`tweets`, `${tweetId}`, true)
 }
 
