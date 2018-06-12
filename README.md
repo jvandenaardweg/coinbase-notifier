@@ -5,10 +5,6 @@ Receive a notification when Coinbase Tweets about a possible new listing. So you
 
 Notifications are send instantly to this Telegram channel [t.me/CoinbaseAnnouncer](https://t.me/CoinbaseAnnouncer) < Join!
 
-
-
-
-
 ## How does it work?
 The script will analyze new tweets from [@coinbase](https://twitter.com/coinbase/coinbase) and matches the tweet with all known cryptocurrencies (thanks Coinmarketcap).
 
@@ -25,5 +21,8 @@ We let you decide if it's an announcement or not. Since it's not clear how Coinb
 
 ## Why did I make this?
 I noticed after the pump. Not gonna happen again.
+
+#### But can't I just use my Twitter app notifications?
+You can. But you'll probably receive other notifications as well. This script filters out the things you don't want to receive as a notification ánd shows relevant information in your phone's lockscreen. So you can act quickly.
 
 ###### Icon made by Smashicons from [Flaticon.com](https://www.flaticon.com)
