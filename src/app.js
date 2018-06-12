@@ -6,7 +6,8 @@ const TelegramNotifier = require('./notifiers/telegram')
 const redis = require('./database/redis')
 const interval = require('interval-promise')
 
-const alreadyAnnouncedCurrencies = [
+// Already listed currencies on Coinbase
+const alreadyListedCurrencies = [
   {
     symbol: 'BTC',
     name: 'Bitcoin'
@@ -25,6 +26,12 @@ const alreadyAnnouncedCurrencies = [
   }
 ]
 
+// Store them
+alreadyListedCurrencies.forEach(currency => {
+  redis.hset(`listings`, currency.symbol, JSON.stringify(currency))
+})
+
+
 function hasUnannouncedCurrencies (text, currencies) {
   // Detects if a string contains currencies that are not yet announced
 
@@ -35,8 +42,8 @@ function hasUnannouncedCurrencies (text, currencies) {
 
     // If we found some currencies in the text...
     if(matchesCurrencyName || matchesCurrencySymbol) {
-      // We can now check if the found currency does not exist yet in the alreadyAnnouncedCurrencies array
-      const hasNewSymbol = alreadyAnnouncedCurrencies.every(announcedCurrency => announcedCurrency.symbol !== currency.symbol)
+      // We can now check if the found currency does not exist yet in the alreadyListedCurrencies array
+      const hasNewSymbol = alreadyListedCurrencies.every(announcedCurrency => announcedCurrency.symbol !== currency.symbol)
       if (hasNewSymbol) {
         prev.push(currency)
       }
@@ -72,7 +79,7 @@ async function getData() {
       console.log(`Coinbase Notifier: Found ${newTweets.length} tweets to analyze! Analyzing...`)
 
       const matchingTweets = getMatchingTweets(newTweets, currencies)
-      console.log(matchingTweets.length)
+
       if (matchingTweets.length) {
         console.log(`Coinbase Notifier: Found a matching Tweet after analyzing!`)
 
@@ -80,6 +87,7 @@ async function getData() {
 
           // Make a list of matching currencies, like: BTC, ETH etc...
           const currenciesList = match.currencies.map(currency => {
+            redis.hset(`listings`, currency.symbol, JSON.stringify(currency))
             return currency.symbol
           }).join(', ')
 
@@ -94,12 +102,14 @@ async function getData() {
 
     }
 
+    // Save the Tweets in this run in Redis, so we can determine new tweets
     newTweets.forEach(tweet => {
       store(tweet.id)
     })
 
   } catch (err) {
-    console.log(err)
+    console.log('ERROR getting and/or analyzing data')
+    throw err
   }
 
 }
@@ -130,18 +140,20 @@ function getStoredTweetIds () {
   return redis.hgetall('tweets')
 }
 
-function broadcastMessageToSubscribers (message) {
+async function broadcastMessageToSubscribers (message) {
   const telegramNotifier = new TelegramNotifier()
-  telegramNotifier.sendMessage(message)
-  console.log(message)
+  try {
+    await telegramNotifier.sendMessage(message)
+    console.log(`Coinbase Notifier: Send message to channel ${process.env.TELEGRAM_CHANNEL}`)
+  } catch (err) {
+    console.log('ERROR sending message to Telegram channel')
+    throw err
+  }
 }
 
-// if (process.env.NODE_ENV === 'production') {
-  interval(async () => {
-    await getData()
-  }, 5000, {stopOnError: false})
-// } else {
-  // getData()
-// }
+// Lower the interval time when we are working on it
+const intervalTime = (process.env.NODE_ENV === 'production') ? 2000 : 10000
 
-
+interval(async () => {
+  await getData()
+}, intervalTime, {stopOnError: false})
