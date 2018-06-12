@@ -23,6 +23,8 @@ We let you decide if it's an announcement or not. Since it's not clear how Coinb
 I noticed after the pump. Not gonna happen again.
 
 #### But can't I just use my Twitter app notifications?
-You can, but you'll receive other notifications as well. This script filters out the things you don't want to receive as a notification.
+You can. But you'll probably receive other notifications as well. This script filters out the things you don't want to receive as a notification ánd shows relevant information in your phone's lockscreen. So you can act quickly.
 
 ###### Icon made by Smashicons from [Flaticon.com](https://www.flaticon.com)
+
+###### I'm not affiliated with Coinbase in any way. I just created this service because I thought others find this helpful.
