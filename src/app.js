@@ -114,7 +114,7 @@ async function getData() {
             return currency.symbol
           }).join(', ')
 
-          const message = `Possible new Coinbase listing for ${currenciesList}?\n https://twitter.com/coinbase/status/${match.tweet.id} \n\n "${match.tweet.text}"`
+          const message = `Possible new Coinbase listing for ${currenciesList}?\n https://twitter.com/coinbase/status/${match.tweet.id_str} \n\n "${match.tweet.text}"`
 
           broadcastMessageToSubscribers(message)
         })
