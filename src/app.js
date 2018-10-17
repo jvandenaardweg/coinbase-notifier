@@ -6,34 +6,57 @@ const TelegramNotifier = require('./notifiers/telegram')
 const redis = require('./database/redis')
 const interval = require('interval-promise')
 
-// Already listed currencies on Coinbase
-const alreadyListedCurrencies = [
-  {
-    symbol: 'BTC',
-    name: 'Bitcoin'
-  },
-  {
-    symbol: 'LTC',
-    name: 'Litecoin'
-  },
-  {
-    symbol: 'BCH',
-    name: 'Bitcoin Cash'
-  },
-  {
-    symbol: 'ETH',
-    name: 'Ethereum'
+async function getAlreadyListedCurrencies () {
+  console.log('Coinbase Notifier: Getting already listed currencies from cache...')
+  try {
+    const listings = await redis.hgetall('listings')
+    const symbols = (listings) ? Object.keys(listings) : null
+    const currencies = symbols.map(symbol => {
+      const listing = JSON.parse(listings[symbol])
+      return {
+        symbol: listing.symbol,
+        name: listing.name
+      }
+    })
+    console.log(`Coinbase Notifier: Got ${symbols.length} currencies from cache.`)
+    return currencies
+  } catch (err) {
+    console.log('ERROR getting the listings from cache')
+    throw err
   }
-]
+}
 
-// Store them
-alreadyListedCurrencies.forEach(currency => {
-  redis.hset(`listings`, currency.symbol, JSON.stringify(currency))
-})
+// Method to store some initial data, when starting the project with an empty cache
+// function initData () {
+//   const alreadyListedCurrencies = [
+//     {
+//       symbol: 'BTC',
+//       name: 'Bitcoin'
+//     },
+//     {
+//       symbol: 'LTC',
+//       name: 'Litecoin'
+//     },
+//     {
+//       symbol: 'BCH',
+//       name: 'Bitcoin Cash'
+//     },
+//     {
+//       symbol: 'ETH',
+//       name: 'Ethereum'
+//     }
+//   ]
+
+//   // Store them
+//   alreadyListedCurrencies.forEach(currency => {
+//     redis.hset(`listings`, currency.symbol, JSON.stringify(currency))
+//   })
+// }
 
 
-function hasUnannouncedCurrencies (text, currencies) {
+async function hasUnannouncedCurrencies (text, currencies) {
   // Detects if a string contains currencies that are not yet announced
+  const alreadyListedCurrencies = await getAlreadyListedCurrencies()
 
   const matchingCurrency = currencies.reduce((prev, currency) => {
 
